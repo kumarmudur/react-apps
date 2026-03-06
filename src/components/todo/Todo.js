@@ -26,17 +26,22 @@ const TodoApp = () => {
         );
     }, []);
 
-    //console.log('todos...', todos);
+    const deleteTodo = useCallback(id => {
+        setTodos(prev => prev.filter(todo => todo.id !== id));
+    }, []);
+
+    console.log('todos...', todos);
 
     return (
         <div>
             <h2>Todo App</h2>
-            <input value={input} onChange={handleChange}/>
-            <button onClick={handleAddTodo}>Add</button>
-
+            <div style={{ display: "flex", gap: "10px", marginBottom: "10px", alignItems: "center" }}>
+                <input id="text" value={input} onChange={handleChange}/>
+                <button onClick={handleAddTodo}>Add</button>
+            </div>
             {todos.map(todo => {
                 return (
-                    <TodoItem key={todo.id} todo={todo} onToggle={toggleTodo}/>
+                    <TodoItem key={todo.id} todo={todo} onDelete={deleteTodo} onToggle={toggleTodo}/>
                 )
             })}
         </div>

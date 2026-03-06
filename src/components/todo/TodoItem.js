@@ -1,18 +1,29 @@
-import { memo} from "react";
+import { memo, useCallback } from "react";
+
+const styles = {
+    container: {
+        display: "flex",
+        gap: "10px",
+        marginBottom: "8px",
+        alignItems: "center",
+    },
+    completed: {
+        textDecoration: "line-through",
+        opacity: 0.9
+    }
+}
 
 const TodoItem = ({ todo, onDelete, onToggle }) => {
-    console.log('TodoItem rendering');
     const { id, text, isCompleted } = todo;
 
-    const handleCheck = () => onToggle(id);
-
-    const handleDeleteTodo = () => onDelete(id)
+    const handleToggle = useCallback(() => onToggle(id), [id, onToggle]);
+    const handleDelete = useCallback(() => onDelete(id), [id, onDelete]);
 
     return (
-        <div style={{ display: "flex", gap: "10px", marginBottom: "8px" }}>
-            <input type="checkbox" checked={isCompleted} onChange={handleCheck}/>
-            <span style={{ textDecoration: isCompleted ? "line-through": ""}}>{text}</span>
-            <button onClick={handleDeleteTodo}>Delete</button>
+        <div style={styles.container}>
+            <input type="checkbox" checked={isCompleted} onChange={handleToggle}/>
+            <span style={isCompleted ? styles.completed : undefined }>{text}</span>
+            <button onClick={handleDelete} aria-label={`Delete ${text}`}>Delete</button>
         </div>
     )
 };
